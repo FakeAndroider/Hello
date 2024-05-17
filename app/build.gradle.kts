@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
 }
-
 android {
     namespace = Define.APPLICATION_ID
     compileSdk = Define.TARGET_SDK
@@ -10,13 +8,11 @@ android {
     defaultConfig {
         applicationId = Define.APPLICATION_ID
         minSdk = Define.MIN_SDK
-        targetSdk = Define.TARGET_SDK
+        targetSdk = 34
         versionCode = Define.VERSION_CODE
         versionName = Define.VERSION_NAME
 
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+ /*       testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"*/
     }
 
     buildTypes {
@@ -32,32 +28,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+        viewBinding = true
     }
 }
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.compose)
-    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(libs.constraintlayout)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
 }
