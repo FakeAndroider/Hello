@@ -1,59 +1,78 @@
 package org.work;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.work.boot.LoggerBoot;
 import org.work.databinding.ActivityMainBinding;
+import org.work.ui.ViewPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        onAppBoot();
+        onBuildFramework();
+    }
+
+
+    private void onAppBoot() {
+        new LoggerBoot().onStart();
+    }
+
+    private void onBuildFramework() {
+        // 获取根视图设置为当前contentView
         org.work.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
+        // 添加选项卡
+        final TabLayout tabLayout = binding.navTab;
 
-        addNavigationItemTapListener(navView, navController);
-    }
+        final ViewPager2 viewPager = binding.viewPager;
 
-    private void addNavigationItemTapListener(final BottomNavigationView navView, final NavController navController) {
-        navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.navigation_home:
-                        navController.navigate(R.id.navigation_home);
-                        return true;
-                    case R.id.navigation_dashboard:
-                        navController.navigate(R.id.navigation_dashboard);
-                        return true;
-                }
-                return false;
+        // 创建 fragmentStateAdapter 实例
+        final FragmentStateAdapter adapter = new ViewPagerAdapter(this);
+        viewPager.setAdapter(adapter);
+
+
+        new TabLayoutMediator(tabLayout, viewPager, ((tab, i) -> {
+            final View icon = LayoutInflater.from(this).inflate(R.menu.tab_item, null);
+            final ImageView image = icon.findViewById(R.id.icon_image);
+            final TextView title = icon.findViewById(R.id.icon_text);
+
+            switch (i) {
+                case 0:
+                    title.setText(R.string.title_home);
+                    image.setImageResource(R.drawable.ic_home_black_24dp);
+                    break;
+                case 1:
+                    title.setText(R.string.title_dashboard);
+                    image.setImageResource(R.drawable.ic_dashboard_black_24dp);
+                    break;
+                case 2:
+                    title.setText(R.string.title_notifications);
+                    image.setImageResource(R.drawable.ic_notifications_black_24dp);
+                    break;
             }
-        });
+//            image.setColorFilter(ContextCompat.getColorStateList(MainActivity.this, R.drawable.tab_color_selector));
+            title.setTextColor(ContextCompat.getColorStateList(MainActivity.this, R.drawable.tab_color_selector));
+            tab.setCustomView(icon);
+        })).attach();
     }
+
 
 }
