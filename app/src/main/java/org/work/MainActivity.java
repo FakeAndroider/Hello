@@ -1,22 +1,17 @@
 package org.work;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.work.boot.LoggerBoot;
 import org.work.databinding.ActivityMainBinding;
 import org.work.ui.ViewPagerAdapter;
+import org.work.ui.ViewPagerBinder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,30 +43,9 @@ public class MainActivity extends AppCompatActivity {
         final FragmentStateAdapter adapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(adapter);
 
+        // 创建 ViewPager 和 tabLayout 建立关系
+        ViewPagerBinder.builder(this, tabLayout, viewPager);
 
-        new TabLayoutMediator(tabLayout, viewPager, ((tab, i) -> {
-            final View icon = LayoutInflater.from(this).inflate(R.menu.tab_item, null);
-            final ImageView image = icon.findViewById(R.id.icon_image);
-            final TextView title = icon.findViewById(R.id.icon_text);
-
-            switch (i) {
-                case 0:
-                    title.setText(R.string.title_home);
-                    image.setImageResource(R.drawable.ic_home_black_24dp);
-                    break;
-                case 1:
-                    title.setText(R.string.title_dashboard);
-                    image.setImageResource(R.drawable.ic_dashboard_black_24dp);
-                    break;
-                case 2:
-                    title.setText(R.string.title_notifications);
-                    image.setImageResource(R.drawable.ic_notifications_black_24dp);
-                    break;
-            }
-//            image.setColorFilter(ContextCompat.getColorStateList(MainActivity.this, R.drawable.tab_color_selector));
-            title.setTextColor(ContextCompat.getColorStateList(MainActivity.this, R.drawable.tab_color_selector));
-            tab.setCustomView(icon);
-        })).attach();
     }
 
 
