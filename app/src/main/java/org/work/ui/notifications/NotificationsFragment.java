@@ -10,13 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.work.databinding.FragmentNotificationsBinding;
+/*import org.work.databinding.FragmentNotificationsBinding;*/
 
 public class NotificationsFragment extends Fragment {
 
-    private FragmentNotificationsBinding binding;
+/*    private FragmentNotificationsBinding binding;*/
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+  /*  public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         NotificationsViewModel notificationsViewModel =
                 new ViewModelProvider(this).get(NotificationsViewModel.class);
@@ -28,10 +28,10 @@ public class NotificationsFragment extends Fragment {
         notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
-
+*/
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+/*        binding = null;*/
     }
 }

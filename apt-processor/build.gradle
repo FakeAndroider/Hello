@@ -1,0 +1,18 @@
+plugins {
+    id 'java-library'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+
+dependencies {
+    implementation Deps.java_poet
+
+    implementation Deps.auto_service
+    annotationProcessor Deps.auto_service
+    implementation project(path: ':apt-annotation')
+
+}

@@ -9,11 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.orhanobut.logger.Logger;
-
 import org.work.databinding.FragmentHomeBinding;
+import org.work.log;
+
 
 public class HomeFragment extends Fragment {
 
@@ -23,65 +24,71 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.d(loggerPre + "onCreate");
+        log.d(loggerPre + "onCreate");
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Logger.d(loggerPre + "onViewCreated");
+        log.d(loggerPre + "onViewCreated");
     }
 
     @Override
     public void onStart() {
-        Logger.d(loggerPre + "onStart");
+        log.d(loggerPre + "onStart");
         super.onStart();
     }
 
     @Override
     public void onResume() {
-        Logger.d(loggerPre + "onResume");
+        log.d(loggerPre + "onResume");
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        Logger.d(loggerPre + "onPause");
+        log.d(loggerPre + "onPause");
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        Logger.d(loggerPre + "onStop");
+        log.d(loggerPre + "onStop");
         super.onStop();
     }
 
 
     @Override
     public void onDetach() {
-        Logger.d(loggerPre + "onDetach");
+        log.d(loggerPre + "onDetach");
         super.onDetach();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        Logger.d(loggerPre + "onCreateView");
+        log.d(loggerPre + "onCreateView");
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
+        final View root = binding.getRoot();
         final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                textView.setText(s);
+            }
+        });
         return root;
+
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         binding = null;
 
-        Logger.d(loggerPre + "onDestroy");
+        log.d(loggerPre + "onDestroy");
+        super.onDestroyView();
+
     }
 }

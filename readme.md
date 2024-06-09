@@ -1,6 +1,5 @@
-项目配置：
-AGP 7.4.2
-Gradle 7.5
-Java 11
-MinSDK 21
-TargetSDK 34
+# AutoService_test
+## 坑点记录博客：https://blog.csdn.net/fesdgasdgasdg/article/details/106888077
+
+
+## gradle 版本 6.7.1

@@ -1,0 +1,4 @@
+include ':apt-annotation'
+include ':apt-processor'
+include ':app'
+rootProject.name = "Worker"

@@ -3,18 +3,19 @@ package org.work.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
+
+
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
 import org.work.R;
 
 public class ViewPagerBinder {
@@ -28,34 +29,37 @@ public class ViewPagerBinder {
                                final ViewPager2 viewPager) {
 
 
-        new TabLayoutMediator(tabLayout, viewPager, ((tab, i) -> {
+        new TabLayoutMediator(tabLayout, viewPager, (new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int i) {
 
-            final View icon = LayoutInflater.from(context).inflate(mTab, null);
-            final ImageView image = icon.findViewById(mTabImage);
-            final TextView title = icon.findViewById(mTabText);
+                final View icon = LayoutInflater.from(context).inflate(mTab, null);
+                final ImageView image = icon.findViewById(mTabImage);
+                final TextView title = icon.findViewById(mTabText);
 
-            switch (i) {
-                case 0:
-                    title.setText(R.string.title_home);
-                    image.setImageResource(R.drawable.ic_home_black_24dp);
-                    image.setSelected(true);
-                    break;
-                case 1:
-                    title.setText(R.string.title_dashboard);
-                    image.setImageResource(R.drawable.ic_dashboard_black_24dp);
-                    break;
-                case 2:
-                    title.setText(R.string.title_notifications);
-                    image.setImageResource(R.drawable.ic_notifications_black_24dp);
-                    break;
+                switch (i) {
+                    case 0:
+                        title.setText(R.string.title_home);
+                        image.setImageResource(R.drawable.ic_home_black_24dp);
+                        image.setSelected(true);
+                        break;
+                    case 1:
+                        title.setText(R.string.title_dashboard);
+                        image.setImageResource(R.drawable.ic_dashboard_black_24dp);
+                        break;
+                    case 2:
+                        title.setText(R.string.title_notifications);
+                        image.setImageResource(R.drawable.ic_notifications_black_24dp);
+                        break;
+                }
+
+                @SuppressLint("ResourceType") final ColorStateList colorStateList =
+                        ContextCompat.getColorStateList(context,
+                                R.drawable.tab_color_selector);
+                title.setTextColor(colorStateList);
+
+                tab.setCustomView(icon);
             }
-
-            final ColorStateList colorStateList =
-                    ContextCompat.getColorStateList(context,
-                            R.drawable.tab_color_selector);
-            title.setTextColor(colorStateList);
-
-            tab.setCustomView(icon);
         })).attach();
 
 
