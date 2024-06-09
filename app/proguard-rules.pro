@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#自定义的自动注入生成类，保护实现
+-keep class **.*ViewModelInit { *; }

@@ -2,9 +2,10 @@ package org.work.base;
 
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,56 +13,44 @@ import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
+import org.work.log;
+
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 abstract public class BaseFragment<VM extends ViewModel, VB extends ViewDataBinding> extends Fragment {
     protected VM viewModel;
-    protected VB binding;
+    protected VB dataBinding;
+
+    protected abstract void onBuildFinish(final VM viewModel, final VB viewDataBing);
 
     @Override
     public void onDestroy() {
-        binding = null;
+        dataBinding = null;
         super.onDestroy();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-/*
-   public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        log.d(loggerPre + "onCreateView");
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        final View root = binding.getRoot();
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
-
-    }
-*
-* */
         viewModel = getViewModelInstance();
-        binding = getViewBindingInstance(inflater, container);
+        dataBinding = getViewBindingInstance(inflater, container);
 
-        assert binding != null;
-        return binding.getRoot();
+        onBuildFinish(viewModel, dataBinding);
+        assert dataBinding != null;
+        return dataBinding.getRoot();
 
     }
 
     private VB getViewBindingInstance(final LayoutInflater inflater, final ViewGroup container) {
 
-        // 获取泛型参数的实际类型
+     /*   // 获取泛型参数的实际类型
         final Type[] typeArguments = getTypeParameterList();
         final int idx = 1;
 
@@ -71,20 +60,56 @@ abstract public class BaseFragment<VM extends ViewModel, VB extends ViewDataBind
 
                 Method inflateMethod = vbClass.getDeclaredMethod("inflate", LayoutInflater.class, ViewGroup.class, boolean.class);
 
-//                final Method method = vbClass.getMethod("inflate", LayoutInflater.class);
-                return (VB) inflateMethod.invoke(null,inflater, container, false);
+                return (VB) inflateMethod.invoke(null, inflater, container, false);
 
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                log.e(e.toString());
+                return null;
             }
 
         }
-        return null;
+        return null;*/
+        try {
+
+            final String currentPackageName = Objects.requireNonNull(this.getClass().getPackage()).getName();
+            final String className = currentPackageName + "." + this.getClass().getSimpleName() + "ViewModelInit";
+
+            final Class<?> generatedClass = Class.forName(className);
+            final Constructor<?> constructor = generatedClass.getDeclaredConstructor();
+            final Object generatedClassInstance = constructor.newInstance();
+
+            final Method method = generatedClass.getDeclaredMethod("provideViewBinding", LayoutInflater.class, ViewGroup.class);
+            return (VB) method.invoke(generatedClassInstance, inflater, container);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return null;
+        }
+
     }
 
     private VM getViewModelInstance() {
 
-        // 获取泛型参数的实际类型
+        try {
+            final String currentPackageName = Objects.requireNonNull(this.getClass().getPackage()).getName();
+            final String className = currentPackageName + "." + this.getClass().getSimpleName() + "ViewModelInit";
+
+            final Class<?> generatedClass = Class.forName(className);
+            final Constructor<?> constructor = generatedClass.getDeclaredConstructor();
+            final Object generatedClassInstance = constructor.newInstance();
+
+            // 获取方法对象
+            final Method method = generatedClass.getDeclaredMethod("provideViewModel", ViewModelStoreOwner.class);
+
+            // 调用方法并返回结果
+            return (VM) method.invoke(generatedClassInstance, this);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return null;
+        }
+
+      /*  // 获取泛型参数的实际类型
         final Type[] typeArguments = getTypeParameterList();
         final int idx = 0;
 
@@ -93,7 +118,7 @@ abstract public class BaseFragment<VM extends ViewModel, VB extends ViewDataBind
             return new ViewModelProvider(this).get(vmClass);
         }
 
-        return null;
+        return null;*/
 
     }
 

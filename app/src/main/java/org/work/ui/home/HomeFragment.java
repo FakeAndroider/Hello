@@ -1,16 +1,10 @@
 package org.work.ui.home;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import org.work.annotation.DataBing;
 import org.work.base.BaseFragment;
@@ -21,13 +15,6 @@ import org.work.log;
 public class HomeFragment extends BaseFragment<HomeViewModel,FragmentHomeBinding> {
 
     final private String loggerPre = "HomeFragment";
-    private FragmentHomeBinding binding;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        log.d(loggerPre + "onCreate");
-    }
 
 
     @Override
@@ -61,7 +48,8 @@ public class HomeFragment extends BaseFragment<HomeViewModel,FragmentHomeBinding
         super.onDetach();
     }
 
-/*    public View onCreateView(@NonNull LayoutInflater inflater,
+
+    /*    public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         log.d(loggerPre + "onCreateView");
         HomeViewModel homeViewModel =
@@ -82,10 +70,20 @@ public class HomeFragment extends BaseFragment<HomeViewModel,FragmentHomeBinding
 
     @Override
     public void onDestroyView() {
-        binding = null;
 
         log.d(loggerPre + "onDestroy");
         super.onDestroyView();
 
+    }
+
+    @Override
+    protected void onBuildFinish(HomeViewModel viewModel, FragmentHomeBinding viewDataBing) {
+        final TextView textView = dataBinding.textHome;
+        viewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                textView.setText(s);
+            }
+        });
     }
 }

@@ -1,12 +1,12 @@
 package org.work.processor;
 
 import com.google.auto.service.AutoService;
-import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
 import org.work.annotation.Logger;
+import org.work.Helper;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -32,6 +32,7 @@ import javax.lang.model.element.Element;
 public class LoggerProcessor extends AbstractProcessor {
 
     private boolean isProcess = false;
+    final private String packageName = "com.orhanobut.logger";
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
@@ -61,57 +62,47 @@ public class LoggerProcessor extends AbstractProcessor {
         return true;
     }
 
-     private void onBuildLogger(final Element e) {
-        MethodSpec execute = MethodSpec.methodBuilder("onInit")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(void.class)
-                .addStatement(
-                        "  final $T formatStrategy = $T.newBuilder()\n" +
-                                "                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true\n" +
-                                "                .methodCount(0)         // (Optional) How many method line to show. Default 2\n" +
-                                "                .methodOffset(0)        // (Optional) Hides internal method calls up to offset. Default 5\n" +
-                                "                .tag(\"Worker\")   // (Optional) Global tag for every log. Default PRETTY_LOGGER\n" +
-                                "                .build();\n" +
-                                "\n" +
-                                "$T.addLogAdapter(new $T(formatStrategy));",
-                        _T("FormatStrategy"),
-                        _T("PrettyFormatStrategy"),
-                        _T("Logger"),
-                        _T("AndroidLogAdapter")
-                )
-                .build();
+    private void onBuildLogger(final Element e) {
 
-
-        MethodSpec dPrinter = MethodSpec.methodBuilder("d")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addParameter(Object.class, "val")
-                .addStatement("$T.d(val)", _T("Logger"))
-                .build();
-
-        MethodSpec jsonPrinter = MethodSpec.methodBuilder("json")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addParameter(String.class, "val")
-                .addStatement("$T.json(val)", _T("Logger"))
-                .build();
-
-
-        MethodSpec ePrinter = MethodSpec.methodBuilder("e")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addParameter(String.class, "val")
-                .addStatement("$T.e(val)", _T("Logger"))
-                .build();
-
-
-        TypeSpec loggerClass = TypeSpec.classBuilder("log")
+        final TypeSpec loggerClass = TypeSpec.classBuilder("log")
                 .addModifiers(Modifier.PUBLIC)
-                .addMethod(execute)
-                .addMethod(dPrinter)
-                .addMethod(ePrinter)
-                .addMethod(jsonPrinter)
+                .addMethod(MethodSpec.methodBuilder("onInit")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .returns(void.class)
+                        .addStatement(
+                                "  final $T formatStrategy = $T.newBuilder()\n" +
+                                        "                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true\n" +
+                                        "                .methodCount(0)         // (Optional) How many method line to show. Default 2\n" +
+                                        "                .methodOffset(0)        // (Optional) Hides internal method calls up to offset. Default 5\n" +
+                                        "                .tag(\"Worker\")   // (Optional) Global tag for every log. Default PRETTY_LOGGER\n" +
+                                        "                .build();\n" +
+                                        "\n" +
+                                        "$T.addLogAdapter(new $T(formatStrategy));",
+                                Helper.T(packageName, "FormatStrategy"),
+                                Helper.T(packageName, "PrettyFormatStrategy"),
+                                Helper.T(packageName, "Logger"),
+                                Helper.T(packageName, "AndroidLogAdapter")
+                        )
+                        .build())
+                .addMethod(MethodSpec.methodBuilder("d")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addParameter(Object.class, "val")
+                        .addStatement("$T.d(val)", Helper.T(packageName, "Logger"))
+                        .build())
+                .addMethod(MethodSpec.methodBuilder("e")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addParameter(String.class, "val")
+                        .addStatement("$T.e(val)", Helper.T(packageName, "Logger"))
+                        .build())
+                .addMethod(MethodSpec.methodBuilder("json")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addParameter(String.class, "val")
+                        .addStatement("$T.json(val)", Helper.T(packageName, "Logger"))
+                        .build())
                 .build();
 
         ExecutableElement method = (ExecutableElement) e;
-        TypeElement classElement = (TypeElement) method.getEnclosingElement();
+        final TypeElement classElement = (TypeElement) method.getEnclosingElement();
 
         final String packageName = processingEnv.getElementUtils().getPackageOf(classElement).getQualifiedName().toString();
         JavaFile javaFile = JavaFile.builder(packageName, loggerClass)
@@ -124,7 +115,5 @@ public class LoggerProcessor extends AbstractProcessor {
         }
     }
 
-    static private ClassName _T(final String className) {
-        return ClassName.get("com.orhanobut.logger", className);
-    }
+
 }
