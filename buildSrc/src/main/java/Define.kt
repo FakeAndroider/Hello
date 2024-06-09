@@ -36,7 +36,7 @@ object Deps {
         "androidx.constraintlayout:constraintlayout:${Version.app_constraintlayout}"
 
     /*log 组件*/
-    const val Logger = "com.orhanobut:logger:${Version.logger}"
+    const val logger = "com.orhanobut:logger:${Version.logger}"
 
     /*auto-service 组件*/
     const val auto_service = "com.google.auto.service:auto-service:${Version.auto_service}"

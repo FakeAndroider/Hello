@@ -6,7 +6,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
-import org.work.annotation.ComponentLogger;
+import org.work.annotation.Logger;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -26,7 +26,7 @@ import javax.tools.Diagnostic;
 
 import javax.lang.model.element.Element;
 
-@SupportedAnnotationTypes("org.work.annotation.LoggerSDK")
+@SupportedAnnotationTypes("org.work.annotation.Logger")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @AutoService(Processor.class)
 public class LoggerProcessor extends AbstractProcessor {
@@ -36,7 +36,7 @@ public class LoggerProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         HashSet<String> set = new HashSet<>();
-        set.add(ComponentLogger.class.getCanonicalName());
+        set.add(Logger.class.getCanonicalName());
         return set;
     }
 
@@ -47,7 +47,7 @@ public class LoggerProcessor extends AbstractProcessor {
             processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "=====>PROCESS APT");
 
 
-            Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(ComponentLogger.class);
+            Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Logger.class);
             if (!elements.isEmpty()) {
                 Element e = (Element) elements.toArray()[0];
                 if (e.getKind() == ElementKind.METHOD) {

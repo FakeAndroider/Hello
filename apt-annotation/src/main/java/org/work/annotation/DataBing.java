@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/*Logger 注册*/
+/*dataBing*/
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.METHOD)
-public @interface ComponentLogger {
+@Target(ElementType.CONSTRUCTOR)
+public @interface DataBing {
 }

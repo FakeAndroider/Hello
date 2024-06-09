@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.work.annotation.ComponentLogger;
+import org.work.annotation.Logger;
 import org.work.annotation.MyAnnotation;
 
 import org.work.databinding.ActivityMainBinding;
@@ -20,11 +20,10 @@ public class MainActivity extends AppCompatActivity {
     private int age;
 
     @Override
-    @ComponentLogger
+    @Logger
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         buildFramework();
-
         log.onInit();
 
     }
@@ -35,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(root);
         MainViewModel viewModel =
                 new ViewModelProvider(this).get(MainViewModel.class);
-        viewModel.bind(binding,this);
-
+        viewModel.bind(binding, this);
     }
 
 }
