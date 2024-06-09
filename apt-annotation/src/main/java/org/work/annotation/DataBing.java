@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 /*dataBing*/
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.CONSTRUCTOR)
+@Target(ElementType.TYPE)
 public @interface DataBing {
 }

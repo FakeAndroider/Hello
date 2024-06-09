@@ -12,11 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.work.annotation.DataBing;
+import org.work.base.BaseFragment;
 import org.work.databinding.FragmentHomeBinding;
 import org.work.log;
 
-
-public class HomeFragment extends Fragment {
+@DataBing
+public class HomeFragment extends BaseFragment<HomeViewModel,FragmentHomeBinding> {
 
     final private String loggerPre = "HomeFragment";
     private FragmentHomeBinding binding;
@@ -27,11 +29,6 @@ public class HomeFragment extends Fragment {
         log.d(loggerPre + "onCreate");
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        log.d(loggerPre + "onViewCreated");
-    }
 
     @Override
     public void onStart() {
@@ -64,7 +61,7 @@ public class HomeFragment extends Fragment {
         super.onDetach();
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+/*    public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         log.d(loggerPre + "onCreateView");
         HomeViewModel homeViewModel =
@@ -81,7 +78,7 @@ public class HomeFragment extends Fragment {
         });
         return root;
 
-    }
+    }*/
 
     @Override
     public void onDestroyView() {
