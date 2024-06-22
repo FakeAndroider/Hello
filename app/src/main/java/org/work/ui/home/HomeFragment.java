@@ -49,25 +49,6 @@ public class HomeFragment extends BaseFragment<HomeViewModel,FragmentHomeBinding
     }
 
 
-    /*    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        log.d(loggerPre + "onCreateView");
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        final View root = binding.getRoot();
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
-
-    }*/
-
     @Override
     public void onDestroyView() {
 

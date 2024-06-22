@@ -50,25 +50,6 @@ abstract public class BaseFragment<VM extends ViewModel, VB extends ViewDataBind
 
     private VB getViewBindingInstance(final LayoutInflater inflater, final ViewGroup container) {
 
-     /*   // 获取泛型参数的实际类型
-        final Type[] typeArguments = getTypeParameterList();
-        final int idx = 1;
-
-        if (typeArguments.length > 0 && typeArguments[idx] instanceof Class) {
-            final Class<VB> vbClass = (Class<VB>) typeArguments[idx];
-            try {
-
-                Method inflateMethod = vbClass.getDeclaredMethod("inflate", LayoutInflater.class, ViewGroup.class, boolean.class);
-
-                return (VB) inflateMethod.invoke(null, inflater, container, false);
-
-            } catch (Exception e) {
-                log.e(e.toString());
-                return null;
-            }
-
-        }
-        return null;*/
         try {
 
             final String currentPackageName = Objects.requireNonNull(this.getClass().getPackage()).getName();
@@ -109,30 +90,7 @@ abstract public class BaseFragment<VM extends ViewModel, VB extends ViewDataBind
             return null;
         }
 
-      /*  // 获取泛型参数的实际类型
-        final Type[] typeArguments = getTypeParameterList();
-        final int idx = 0;
-
-        if (typeArguments.length > 0 && typeArguments[idx] instanceof Class) {
-            final Class<VM> vmClass = (Class<VM>) typeArguments[idx];
-            return new ViewModelProvider(this).get(vmClass);
-        }
-
-        return null;*/
 
     }
 
-    private Type[] getTypeParameterList() {
-
-        final Type superClass = getClass().getGenericSuperclass();
-
-        // 确保泛型超类是ParameterizedType
-        if (superClass instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) superClass;
-            return parameterizedType.getActualTypeArguments();
-        }
-        return new Type[0];
-
-
-    }
 }

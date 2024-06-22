@@ -11,6 +11,7 @@ import org.work.annotation.Logger;
 import org.work.annotation.MyAnnotation;
 
 import org.work.databinding.ActivityMainBinding;
+import org.work.tools.CustomDensityTool;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     @Logger
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CustomDensityTool.set(this, MainApplication.getInstance());
+
         buildFramework();
         log.onInit();
 
